@@ -1,0 +1,9 @@
+pool_id,pool_address,protocol,token0_id,token1_id,fee_tier_bps,initial_tvl_usd,created_at
+pool_weth_usdc,0x853e4689789bf41f4c1d1ef9a18c1bec13a1e760,UniswapV3,tok_1,tok_2,500,5000000.0,2026-09-21
+pool_weth_usdt,0xf188528d41bb0d4b32dd53d4ae89eea07a4f579e,UniswapV3,tok_1,tok_3,500,3200000.0,2026-09-03
+pool_wbtc_weth,0xbf59cd932cd33931f0d15eb4d25dce119925bb0b,UniswapV3,tok_4,tok_1,3000,4500000.0,2026-08-15
+pool_link_weth,0x8e8a573a8acee7c54d54154a4c7a37fc313f6d14,UniswapV3,tok_5,tok_1,3000,850000.0,2026-09-12
+pool_uni_weth,0xb2dfd1ddd03adb19d7f34f613947294793b21274,UniswapV3,tok_6,tok_1,3000,620000.0,2026-08-17
+pool_pepe_weth,0xde4288d541a4655de9b2a329082ec45e5305f35a,BaseSwap,tok_7,tok_1,10000,120000.0,2026-09-13
+pool_moon_weth,0xa49990ab85a85844fe7eaab34998c8efd8fafcae,BaseSwap,tok_8,tok_1,10000,80000.0,2026-08-16
+pool_rug_weth,0x576f47127302f09be3ef8da201becf2b0764bd88,BaseSwap,tok_9,tok_1,10000,95000.0,2026-09-11

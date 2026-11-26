@@ -1,0 +1,11 @@
+token_id,token_address,symbol,name,decimals,is_verified,risk_score,created_at
+tok_1,0x9d79b1a37f31801cd11a6706fb40d6bd57526846,WETH,Wrapped Ether,18,True,0.05,2026-08-21
+tok_2,0xde562439e9c1b823a96089bca71f3d1a6d2d3cad,USDC,USD Coin,6,True,0.01,2026-07-14
+tok_3,0x829f411669842a979911036cf3e822086ecaa007,USDT,Tether USD,6,True,0.02,2026-09-10
+tok_4,0x8ba8f83718aa8f3bd1f65e8144e61d9ab30fcb06,WBTC,Wrapped Bitcoin,8,True,0.04,2026-07-12
+tok_5,0x2906e732b10f4db789d35ea68c088ab3f648818b,LINK,Chainlink Token,18,True,0.08,2026-07-30
+tok_6,0xe0cb6e382a5dff72ac1dda96908137478bd536cf,UNI,Uniswap,18,True,0.1,2026-09-21
+tok_7,0x0b3341c2bd2b4acec46edf287a43b9b21175306c,PEPE-SAFE,Pepe Safe Meme,18,False,0.88,2026-08-09
+tok_8,0x899322473081cd277bcd1e3763ea0bf5ee5974c3,MOON-AI,Moon AI Yield,18,False,0.94,2026-08-09
+tok_9,0xed732a1a1131be177dea42619767c2188e12e65b,RUG-INU,Rug Pull Inu,18,False,0.99,2026-08-08
+tok_10,0x03ca8d9aa6a3b7437ff59fce63911f0bd0b3cfba,ALPHA-BOT,Alpha Autonomous,18,True,0.25,2026-07-25

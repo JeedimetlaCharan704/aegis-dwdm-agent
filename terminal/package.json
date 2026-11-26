@@ -1,0 +1,10 @@
+{
+  "name": "aegis-terminal-vercel",
+  "version": "1.0.0",
+  "description": "AegisFi: Autonomous On-Chain Quantitative Risk Terminal (Vercel Serverless)",
+  "main": "api/analytics.js",
+  "scripts": {
+    "start": "node api/analytics.js"
+  },
+  "dependencies": {}
+}

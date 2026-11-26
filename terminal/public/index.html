@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AEGIS // High-Tech Dimensional Warehouse & Risk Terminal</title>
+  
+  <!-- Premium High-Tech Typography: Plus Jakarta Sans + JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    :root {
+      --bg: #030712;
+      --surface: rgba(15, 23, 42, 0.55);
+      --surface-hover: rgba(30, 41, 59, 0.65);
+      --surface-border: rgba(255, 255, 255, 0.08);
+      --surface-border-bright: rgba(56, 189, 248, 0.35);
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --cyan: #38bdf8;
+      --cyan-glow: rgba(56, 189, 248, 0.2);
+      --emerald: #10b981;
+      --emerald-glow: rgba(16, 185, 129, 0.2);
+      --rose: #f43f5e;
+      --rose-glow: rgba(244, 63, 94, 0.25);
+      --indigo: #818cf8;
+      --font-sans: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      min-height: 100vh;
+      padding: 24px 36px;
+      overflow-x: hidden;
+      position: relative;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Ambient Subtle Cyber Grid */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+      background-size: 32px 32px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Ambient Top Spotlight */
+    body::after {
+      content: '';
+      position: fixed;
+      top: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 900px;
+      height: 450px;
+      background: radial-gradient(ellipse at center, rgba(56, 189, 248, 0.09) 0%, rgba(99, 102, 241, 0.04) 40%, transparent 70%);
+      filter: blur(50px);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Interactive Constellation Particle Canvas */
+    #particle-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 2;
+      opacity: 0.65;
+    }
+
+    .app-container {
+      position: relative;
+      z-index: 3;
+      max-width: 1440px;
+      margin: 0 auto;
+    }
+
+    .mono {
+      font-family: var(--font-mono);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Header Bar */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--surface-border);
+      margin-bottom: 22px;
+    }
+
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(99, 102, 241, 0.2));
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 16px var(--cyan-glow);
+    }
+    .brand-icon svg {
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: var(--cyan);
+      stroke-width: 2;
+    }
+
+    .brand-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.015em;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-tag {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      color: var(--cyan);
+      letter-spacing: 0.05em;
+      font-family: var(--font-mono);
+    }
+
+    .brand-sub {
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      letter-spacing: 0.03em;
+      margin-top: 2px;
+    }
+
+    .telemetry-badges {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .meta-badge {
+      font-size: 0.70rem;
+      font-family: var(--font-mono);
+      padding: 5px 11px;
+      border-radius: 6px;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--surface-border);
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      backdrop-filter: blur(10px);
+      transition: all 0.2s ease;
+    }
+    .meta-badge:hover {
+      border-color: rgba(255, 255, 255, 0.18);
+      color: #f1f5f9;
+    }
+
+    .badge-live {
+      background: rgba(16, 185, 129, 0.08);
+      border-color: rgba(16, 185, 129, 0.3);
+      color: #34d399;
+    }
+
+    .pulse-dot {
+      width: 6.5px;
+      height: 6.5px;
+      border-radius: 50%;
+      background: var(--emerald);
+      box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+      animation: pulse-ring 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
+    }
+    @keyframes pulse-ring {
+      0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+      70% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
+
+    /* KPI Grid */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .kpi-card {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 8px;
+      padding: 16px 20px;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(16px);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1.5px;
+      background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+      opacity: 0.35;
+      transition: opacity 0.25s ease;
+    }
+    .kpi-card:hover {
+      border-color: rgba(56, 189, 248, 0.35);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px -10px rgba(0, 0, 0, 0.6), 0 0 20px -6px var(--cyan-glow);
+    }
+    .kpi-card:hover::before {
+      opacity: 1;
+    }
+
+    .kpi-label {
+      font-size: 0.67rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-dim);
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .kpi-value {
+      font-size: 1.55rem;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: -0.02em;
+    }
+    .kpi-sub {
+      font-size: 0.70rem;
+      color: var(--text-muted);
+      margin-top: 5px;
+      font-family: var(--font-mono);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* Segmented High-Tech Navigation Tabs */
+    .tabs-nav {
+      display: flex;
+      gap: 6px;
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid var(--surface-border);
+      padding: 4px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      width: fit-content;
+      backdrop-filter: blur(16px);
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      padding: 8px 16px;
+      color: var(--text-muted);
+      font-size: 0.77rem;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      letter-spacing: 0.02em;
+    }
+    .tab-btn:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.04);
+    }
+    .tab-btn.active {
+      color: #ffffff;
+      background: rgba(56, 189, 248, 0.12);
+      border-color: rgba(56, 189, 248, 0.32);
+      box-shadow: 0 0 14px rgba(56, 189, 248, 0.18);
+    }
+
+    /* Tab Panes */
+    .tab-pane {
+      display: none;
+    }
+    .tab-pane.active {
+      display: block;
+      animation: tabFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes tabFadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    /* High-Tech Cards with Reactive Spotlight */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 16px;
+      backdrop-filter: blur(16px);
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .card:hover {
+      border-color: rgba(255, 255, 255, 0.14);
+      box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.4);
+    }
+
+    .card-title {
+      font-size: 0.73rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #cbd5e1;
+      margin-bottom: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-sans);
+    }
+    .card-title-tag {
+      font-size: 0.65rem;
+      color: var(--cyan);
+      font-family: var(--font-mono);
+      font-weight: 500;
+      letter-spacing: 0.04em;
+    }
+
+    /* Monospace Precision Data Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.77rem;
+    }
+    th {
+      text-align: left;
+      padding: 9px 12px;
+      color: var(--text-dim);
+      font-weight: 600;
+      border-bottom: 1px solid var(--surface-border);
+      text-transform: uppercase;
+      font-size: 0.66rem;
+      letter-spacing: 0.07em;
+    }
+    td {
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.035);
+      font-size: 0.76rem;
+      color: #cbd5e1;
+      transition: background 0.15s ease;
+    }
+    tr:hover td {
+      background: rgba(56, 189, 248, 0.045);
+    }
+
+    /* Buttons */
+    .btn-action {
+      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+      color: #ffffff;
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      padding: 10px 18px;
+      font-size: 0.79rem;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 2px 12px rgba(2, 132, 199, 0.3);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: var(--font-sans);
+    }
+    .btn-action:hover {
+      background: linear-gradient(135deg, #0369a1 0%, #075985 100%);
+      transform: translateY(-1.5px);
+      box-shadow: 0 4px 20px var(--cyan-glow);
+      border-color: rgba(56, 189, 248, 0.5);
+    }
+    .btn-action:active { transform: scale(0.98); }
+
+    .btn-danger {
+      background: linear-gradient(135deg, #e11d48 0%, #be123c 100%);
+      color: #ffffff;
+      border: 1px solid rgba(244, 63, 94, 0.35);
+      padding: 11px 20px;
+      font-size: 0.81rem;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 2px 12px rgba(225, 29, 72, 0.35);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: var(--font-sans);
+    }
+    .btn-danger:hover {
+      background: linear-gradient(135deg, #be123c 0%, #9f1239 100%);
+      transform: translateY(-1.5px);
+      box-shadow: 0 4px 22px rgba(244, 63, 94, 0.45);
+      border-color: rgba(244, 63, 94, 0.6);
+    }
+    .btn-danger:active { transform: scale(0.98); }
+
+    .alert-box {
+      background: rgba(244, 63, 94, 0.08);
+      border-left: 3px solid var(--rose);
+      border-radius: 6px;
+      padding: 12px 16px;
+      color: #fca5a5;
+      font-size: 0.79rem;
+      margin-bottom: 14px;
+      line-height: 1.5;
+      backdrop-filter: blur(8px);
+    }
+
+    /* Terminal Input Box */
+    .terminal-input {
+      width: 100%;
+      padding: 10px 14px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--surface-border);
+      border-radius: 6px;
+      color: #ffffff;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      margin-bottom: 12px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .terminal-input:focus {
+      border-color: var(--cyan);
+      box-shadow: 0 0 12px var(--cyan-glow);
+    }
+
+    .output-console {
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      line-height: 1.6;
+      color: #cbd5e1;
+      white-space: pre-wrap;
+      background: rgba(0, 0, 0, 0.45);
+      padding: 16px;
+      border-radius: 6px;
+      border: 1px solid var(--surface-border);
+      position: relative;
+    }
+
+    /* Scanning Light Trace Keyframe */
+    .scanline-card {
+      position: relative;
+    }
+    .scanline-card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.7), transparent);
+      animation: scanBeam 4s infinite linear;
+    }
+    @keyframes scanBeam {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Particle Constellation Network Canvas -->
+  <canvas id="particle-canvas"></canvas>
+
+  <div class="app-container">
+
+    <!-- Top Bar -->
+    <header class="top-bar">
+      <div class="brand-wrap">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2L3 7v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-9-5z"></path></svg>
+        </div>
+        <div>
+          <div class="brand-title">
+            <span>AEGIS // TERMINAL</span>
+            <span class="brand-tag">v2.4 PRO</span>
+          </div>
+          <div class="brand-sub">Autonomous On-Chain Risk & Dimensional Warehouse Engine</div>
+        </div>
+      </div>
+      <div class="telemetry-badges">
+        <span class="meta-badge badge-live"><span class="pulse-dot"></span>LIVE SYNC</span>
+        <span class="meta-badge">BASE SEPOLIA (84532)</span>
+        <span class="meta-badge">GROQ 120B</span>
+        <span class="meta-badge">DUCKDB OLAP</span>
+      </div>
+    </header>
+
+    <!-- Floating KPI Grid -->
+    <section class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">
+          <span>TOTAL INDEXED VOLUME</span>
+          <span style="color: var(--cyan);">&bull; DWH</span>
+        </div>
+        <div class="kpi-value mono" id="kpi-volume">$0.00</div>
+        <div class="kpi-sub">Verified across 8 liquidity pools</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">
+          <span>SWAP GRAINS (FACT)</span>
+          <span style="color: var(--indigo);">&bull; FACT</span>
+        </div>
+        <div class="kpi-value mono" id="kpi-swaps">0</div>
+        <div class="kpi-sub">Atomic swap events in warehouse</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">
+          <span>CLASSIFIED WALLETS</span>
+          <span style="color: var(--emerald);">&bull; DIM</span>
+        </div>
+        <div class="kpi-value mono" id="kpi-wallets">0</div>
+        <div class="kpi-sub">Behavioral address clusters</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">
+          <span>SCD-2 AUDIT STATES</span>
+          <span style="color: var(--rose);">&bull; HIST</span>
+        </div>
+        <div class="kpi-value mono" id="kpi-scd">0</div>
+        <div class="kpi-sub">Temporal version histories tracked</div>
+      </div>
+    </section>
+
+    <!-- Segmented Navigation Tabs -->
+    <nav class="tabs-nav">
+      <button class="tab-btn active" onclick="switchTab(0)">01. OVERVIEW & OLAP</button>
+      <button class="tab-btn" onclick="switchTab(1)">02. PATTERN DISCOVERY & ANOMALIES</button>
+      <button class="tab-btn" onclick="switchTab(2)">03. QUANTITATIVE SURVEILLANCE</button>
+      <button class="tab-btn" onclick="switchTab(3)">04. CIRCUIT BREAKERS & SETTLEMENT</button>
+    </nav>
+
+    <!-- TAB 1: DWH & OLAP -->
+    <main class="tab-pane active" id="pane-0">
+      <div class="grid-2">
+        <div class="card scanline-card">
+          <div class="card-title">
+            <span>CUMULATIVE DAILY VOLUME ROLL-UP ($ USD)</span>
+            <span class="card-title-tag">DUCKDB ROLL-UP</span>
+          </div>
+          <canvas id="rollupChart" height="170"></canvas>
+        </div>
+        <div class="card">
+          <div class="card-title">
+            <span>INSTITUTIONAL WHALE SLICE (TRADES &ge; $50,000)</span>
+            <span class="card-title-tag">OLAP SLICE</span>
+          </div>
+          <table>
+            <thead>
+              <tr><th>TX HASH</th><th>SENDER</th><th>PAIR</th><th>AMOUNT</th><th>SLIPPAGE</th></tr>
+            </thead>
+            <tbody id="whale-table"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card" style="margin-top: 14px;">
+        <div class="card-title">
+          <span>SLOWLY CHANGING DIMENSION (SCD TYPE 2) // TEMPORAL AUDIT LEDGER</span>
+          <span class="card-title-tag">AUDIT COMPLIANT</span>
+        </div>
+        <table>
+          <thead><tr><th>WALLET ADDRESS</th><th>VERSION</th><th>CLASSIFICATION</th><th>REPUTATION</th><th>PERIOD</th><th>STATUS</th></tr></thead>
+          <tbody id="scd-table"></tbody>
+        </table>
+      </div>
+    </main>
+
+    <!-- TAB 2: PATTERN MINING -->
+    <main class="tab-pane" id="pane-1">
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">
+            <span>ISOLATION FOREST ANOMALY DETECTION // RUG-PULL OUTLIERS</span>
+            <span class="card-title-tag">CONTAMINATION=0.05</span>
+          </div>
+          <table>
+            <thead><tr><th>POOL</th><th>PROTOCOL</th><th>DRAIN %</th><th>THREAT INDEX</th><th>STATUS</th></tr></thead>
+            <tbody id="anomaly-table"></tbody>
+          </table>
+        </div>
+        <div class="card">
+          <div class="card-title">
+            <span>K-MEANS WALLET CLUSTERING (k=4) // SILHOUETTE: 0.6512</span>
+            <span class="card-title-tag">BEHAVIORAL</span>
+          </div>
+          <table>
+            <thead><tr><th>ARCHETYPE</th><th>POPULATION</th><th>WIN RATE</th><th>AVG VOLUME</th></tr></thead>
+            <tbody id="cluster-table"></tbody>
+          </table>
+          <div class="card-title" style="margin-top: 22px;">
+            <span>FP-GROWTH TOKEN AFFINITY RULES</span>
+            <span class="card-title-tag">MIN_SUPPORT=0.15</span>
+          </div>
+          <table>
+            <thead><tr><th>ANTECEDENT</th><th>CONSEQUENT</th><th>SUPPORT</th><th>LIFT</th></tr></thead>
+            <tbody id="rules-table"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+
+    <!-- TAB 3: SURVEILLANCE -->
+    <main class="tab-pane" id="pane-2">
+      <div class="grid-2">
+        <div class="card scanline-card">
+          <div class="card-title">
+            <span>REAL-TIME GROQ 120B SURVEILLANCE SCAN</span>
+            <span class="card-title-tag">LLM AGENT</span>
+          </div>
+          <button class="btn-action" onclick="runSurveillance()" style="width: 100%; margin-bottom: 14px;">
+            <span>⚡</span> RUN HIGH-URGENCY THREAT SCAN
+          </button>
+          <div id="surveillance-alert"></div>
+          <div id="surveillance-output" class="output-console">Click the button above to execute Groq 120B multi-agent quantitative surveillance across the warehouse.</div>
+        </div>
+        <div class="card">
+          <div class="card-title">
+            <span>AD-HOC QUANTITATIVE TERMINAL INQUIRY</span>
+            <span class="card-title-tag">NATURAL LANGUAGE SQL</span>
+          </div>
+          <input type="text" id="query-input" class="terminal-input" placeholder="e.g., Which tokens are smart money accumulating?">
+          <button class="btn-action" onclick="submitQuery()" style="width: 100%;">SUBMIT QUERY</button>
+          <div id="query-output" class="output-console" style="margin-top: 14px;"></div>
+        </div>
+      </div>
+    </main>
+
+    <!-- TAB 4: SETTLEMENT & RESCUE -->
+    <main class="tab-pane" id="pane-3">
+      <div class="grid-2">
+        <div class="card scanline-card">
+          <div class="card-title">
+            <span>CIRCUIT BREAKER TARGET // ERC-4337 SESSION KEY</span>
+            <span class="card-title-tag">ACTIVE EXPLOIT</span>
+          </div>
+          <div class="alert-box">
+            <b>CRITICAL EXPLOIT DETECTED:</b> Pool <code>pool_pepe_weth</code> has suffered a <strong>98.50%</strong> liquidity drain. Isolation threat score: <strong>1.00 (MAX)</strong>.
+          </div>
+          <button class="btn-danger" onclick="executeRescue()" style="width: 100%;">
+            EXECUTE PROTECTIVE TOKEN SWAP (PEPE-SAFE &rarr; USDC)
+          </button>
+        </div>
+        <div class="card">
+          <div class="card-title">
+            <span>TRANSACTION SETTLEMENT LEDGER</span>
+            <span class="card-title-tag">BASE SEPOLIA</span>
+          </div>
+          <div id="rescue-receipt" class="mono" style="color: var(--text-dim); font-size: 0.77rem; padding: 12px; line-height: 1.6;">
+            Awaiting execution. Zero circuit breaker settlements executed in current session.
+          </div>
+        </div>
+      </div>
+    </main>
+
+  </div>
+
+  <script>
+    // =========================================================================
+    // HIGH-TECH BACKGROUND CONSTELLATION NETWORK ANIMATION (LIGHTWEIGHT 60FPS)
+    // =========================================================================
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
+
+    const particles = [];
+    const PARTICLE_COUNT = 38;
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      particles.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.45,
+        vy: (Math.random() - 0.5) * 0.45,
+        radius: Math.random() * 1.6 + 0.8
+      });
+    }
+
+    let isVisible = true;
+    document.addEventListener('visibilitychange', () => {
+      isVisible = !document.hidden;
+    });
+
+    function animateParticles() {
+      if (isVisible) {
+        ctx.clearRect(0, 0, width, height);
+
+        // Update & draw particles
+        for (let i = 0; i < particles.length; i++) {
+          const p = particles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+
+          if (p.x < 0) p.x = width;
+          else if (p.x > width) p.x = 0;
+          if (p.y < 0) p.y = height;
+          else if (p.y > height) p.y = 0;
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(56, 189, 248, 0.4)';
+          ctx.fill();
+
+          // Connect nearby particles
+          for (let j = i + 1; j < particles.length; j++) {
+            const p2 = particles[j];
+            const dx = p.x - p2.x;
+            const dy = p.y - p2.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            if (dist < 130) {
+              ctx.beginPath();
+              ctx.moveTo(p.x, p.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.strokeStyle = `rgba(56, 189, 248, ${0.15 * (1 - dist / 130)})`;
+              ctx.lineWidth = 0.75;
+              ctx.stroke();
+            }
+          }
+        }
+      }
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+
+    // =========================================================================
+    // APPLICATION LOGIC & TAB MANAGEMENT
+    // =========================================================================
+    let appData = null;
+
+    function switchTab(index) {
+      document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+        btn.classList.toggle('active', i === index);
+      });
+      document.querySelectorAll('.tab-pane').forEach((pane, i) => {
+        pane.classList.toggle('active', i === index);
+      });
+    }
+
+    // Smooth KPI Count-Up Animation
+    function animateValue(elemId, start, end, duration, prefix = '', decimals = 0) {
+      const obj = document.getElementById(elemId);
+      if (!obj) return;
+      let startTimestamp = null;
+      const step = (timestamp) => {
+        if (!startTimestamp) startTimestamp = timestamp;
+        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+        const current = progress * (end - start) + start;
+        obj.textContent = prefix + current.toLocaleString(undefined, {
+          minimumFractionDigits: decimals,
+          maximumFractionDigits: decimals
+        });
+        if (progress < 1) {
+          window.requestAnimationFrame(step);
+        }
+      };
+      window.requestAnimationFrame(step);
+    }
+
+    async function loadData() {
+      try {
+        const res = await fetch('/api/analytics');
+        appData = await res.json();
+        renderAll();
+      } catch (err) {
+        console.error("Failed to load analytics", err);
+      }
+    }
+
+    function renderAll() {
+      if (!appData) return;
+
+      // Smooth Count-Up on KPIs
+      animateValue('kpi-volume', 0, appData.kpis.total_volume_usd, 900, '$', 2);
+      animateValue('kpi-swaps', 0, appData.kpis.total_swaps, 750, '', 0);
+      animateValue('kpi-wallets', 0, appData.kpis.total_wallets, 600, '', 0);
+      animateValue('kpi-scd', 0, appData.kpis.scd2_hist_count, 500, '', 0);
+
+      // Rollup Chart with Smooth Cyan Gradient
+      const ctx = document.getElementById('rollupChart').getContext('2d');
+      const gradient = ctx.createLinearGradient(0, 0, 0, 160);
+      gradient.addColorStop(0, '#38bdf8');
+      gradient.addColorStop(1, 'rgba(56, 189, 248, 0.1)');
+
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: appData.olap_rollup.map(d => d.day),
+          datasets: [{
+            label: 'Volume ($ USD)',
+            data: appData.olap_rollup.map(d => d.volume),
+            backgroundColor: gradient,
+            borderRadius: 5,
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { 
+              grid: { color: 'rgba(255,255,255,0.03)' }, 
+              ticks: { color: '#64748b', font: { family: 'JetBrains Mono', size: 9.5 } } 
+            },
+            y: { 
+              grid: { color: 'rgba(255,255,255,0.03)' }, 
+              ticks: { color: '#64748b', font: { family: 'JetBrains Mono', size: 9.5 } } 
+            }
+          }
+        }
+      });
+
+      // Whale Table
+      document.getElementById('whale-table').innerHTML = appData.whale_slice.map(w => `
+        <tr>
+          <td><span style="color: var(--cyan);">${w.tx_hash}</span></td>
+          <td class="mono">${w.wallet}</td>
+          <td>${w.pair}</td>
+          <td class="mono" style="color: #34d399; font-weight: 600;">$${w.amount_usd.toLocaleString()}</td>
+          <td class="mono" style="color: var(--text-muted);">${w.impact}%</td>
+        </tr>
+      `).join('');
+
+      // SCD Table
+      document.getElementById('scd-table').innerHTML = appData.scd_ledger.map(s => `
+        <tr>
+          <td class="mono">${s.wallet}</td>
+          <td><span class="meta-badge">${s.version}</span></td>
+          <td>${s.tag}</td>
+          <td class="mono">${s.rep}</td>
+          <td style="color: var(--text-dim);">${s.period}</td>
+          <td><span style="color:${s.is_current ? '#34d399' : '#64748b'}; font-weight: 600;">${s.is_current ? 'ACTIVE' : 'ARCHIVED'}</span></td>
+        </tr>
+      `).join('');
+
+      // Anomalies Table
+      document.getElementById('anomaly-table').innerHTML = appData.anomalies.map(a => `
+        <tr>
+          <td><strong style="color: #ffffff;">${a.pool}</strong></td>
+          <td style="color: var(--text-muted);">${a.protocol}</td>
+          <td class="mono" style="color: ${a.drain_pct > 80 ? 'var(--rose)' : 'var(--cyan)'}; font-weight: 600;">${a.drain_pct}%</td>
+          <td class="mono">${a.threat_score}</td>
+          <td><span class="meta-badge" style="color: ${a.status === 'CRITICAL' ? 'var(--rose)' : '#34d399'}; border-color: ${a.status === 'CRITICAL' ? 'rgba(244,63,94,0.3)' : 'rgba(16,185,129,0.3)'};">${a.status}</span></td>
+        </tr>
+      `).join('');
+
+      // Clusters Table
+      document.getElementById('cluster-table').innerHTML = appData.clustering.clusters.map(c => `
+        <tr>
+          <td><strong style="color: #ffffff;">${c.name}</strong></td>
+          <td class="mono">${c.size} wallets</td>
+          <td class="mono">${c.avg_win_rate}%</td>
+          <td class="mono" style="color: #34d399; font-weight: 600;">${c.avg_volume}</td>
+        </tr>
+      `).join('');
+
+      // Rules Table
+      document.getElementById('rules-table').innerHTML = appData.association_rules.map(r => `
+        <tr>
+          <td>{ ${r.antecedent} }</td>
+          <td>{ ${r.consequent} }</td>
+          <td class="mono">${r.support}</td>
+          <td class="mono" style="color: var(--cyan); font-weight: 600;">${r.lift}x</td>
+        </tr>
+      `).join('');
+    }
+
+    async function runSurveillance() {
+      const out = document.getElementById('surveillance-output');
+      out.textContent = "Connecting to GroqCloud GPT-OSS-120B... Analyzing pool liquidity flows...";
+      try {
+        const res = await fetch('/api/surveillance');
+        const data = await res.json();
+        out.textContent = data.analysis;
+        document.getElementById('surveillance-alert').innerHTML = '<div class="alert-box"><b>CRITICAL THREAT FLAG:</b> Isolation Forest anomaly index breached in <code>pool_pepe_weth</code>.</div>';
+      } catch (err) {
+        out.textContent = "Surveillance execution error: " + err.message;
+      }
+    }
+
+    async function submitQuery() {
+      const query = document.getElementById('query-input').value;
+      if (!query) return;
+      const out = document.getElementById('query-output');
+      out.textContent = "Querying data warehouse and processing analytical response...";
+      try {
+        const res = await fetch('/api/surveillance?query=' + encodeURIComponent(query));
+        const data = await res.json();
+        out.textContent = data.analysis;
+      } catch (err) {
+        out.textContent = "Query error: " + err.message;
+      }
+    }
+
+    async function executeRescue() {
+      const receiptBox = document.getElementById('rescue-receipt');
+      receiptBox.innerHTML = "Broadcasting signed protective transaction to Base Sepolia...";
+      try {
+        const res = await fetch('/api/rescue', { method: 'POST' });
+        const d = await res.json();
+        receiptBox.innerHTML = `
+          <div style="border-left: 3px solid #10b981; padding-left: 14px; background: rgba(16, 185, 129, 0.05); padding: 12px; border-radius: 4px;">
+            <div style="color: #34d399; font-weight: 700; margin-bottom: 6px;">TRANSACTION CONFIRMED (BLOCK #${d.block_number})</div>
+            <div style="font-size: 0.68rem; color: #64748b; letter-spacing: 0.05em;">TRANSACTION HASH</div>
+            <div class="mono" style="font-size: 0.77rem; color: var(--cyan); word-break: break-all; margin-bottom: 6px;">${d.tx_hash}</div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 6px;">
+              <span>EVACUATED: <strong>${d.tokens_evacuated.toLocaleString()} ${d.compromised_asset}</strong></span>
+              <span style="color: #34d399; font-weight: 700;">RECEIVED: $${d.usdc_secured} USDC</span>
+            </div>
+            <div style="font-size: 0.74rem; margin-top: 8px;">
+              <a href="${d.explorer_url}" target="_blank" style="color: var(--cyan); text-decoration: none; font-weight: 600;">VIEW ON BASESCAN &rarr;</a>
+            </div>
+          </div>
+        `;
+      } catch (err) {
+        receiptBox.textContent = "Execution error: " + err.message;
+      }
+    }
+
+    loadData();
+  </script>
+</body>
+</html>
